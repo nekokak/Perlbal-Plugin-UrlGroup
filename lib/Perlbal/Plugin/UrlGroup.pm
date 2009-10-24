@@ -5,11 +5,14 @@ no  warnings qw(deprecated);
 
 use URI::Escape;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 our %Services;  # service_name => $svc
 my $manage_command = 'manage_command.group';
 my $manage_command_regex = 'manage_command.group_regex';
+
+my $group_regex = '';
+my $group_postfix = '';
 my %url_group;
 
 # when "LOAD" directive loads us up
@@ -18,8 +21,8 @@ sub load {
 
     Perlbal::register_global_hook($manage_command_regex, sub {
         my $mc = shift->parse(qr/^group_regex\s+(\S+)\s*=\s*(\w+)$/,
-                              "usage: GROUP_REGEX <regex> = <group_postfix>");
-        my ($group_regex,$group_postfix) = $mc->args;
+                              "usage: GROUP_REGEX <extension_regex> = <group_postfix>");
+        ($group_regex,$group_postfix) = $mc->args;
         $url_group{$group_regex} = $group_postfix;
         return $mc->ok;
     });
@@ -55,7 +58,7 @@ sub unload {
     my $class = shift;
 
     Perlbal::unregister_global_hook($manage_command);
-    Perlbal::unregister_global_hook($$manage_command_regex);
+    Perlbal::unregister_global_hook($manage_command_regex);
     unregister($class, $_) foreach (values %Services);
     return 1;
 }
@@ -122,8 +125,8 @@ sub url_group_selector {
     if ( $target ) {
         my $dest_service;
         for my $regex ( keys %url_group ) {
-            if ( $chk_uri =~ /$regex/o ) {
-                $dest_service .= $target.$url_group{$regex};
+            if ( $chk_uri =~ /$regex/ ) {
+                $dest_service = $target.$url_group{$regex};
                 last;
             }
             $dest_service = $target;
