@@ -5,6 +5,7 @@ use Perlbal::Test;
 use Perlbal::Test::WebServer;
 use Perlbal::Test::WebClient;
 use Test::Declare;
+use Test::TCP;
 
 my %hosts = (
     'nekokak.intra'   => +{ },
@@ -53,13 +54,15 @@ for my $host (keys %hosts) {
     };
 }
 
+my $port = Test::TCP::empty_port;
+
 my $conf = qq{
 LOAD UrlGroup
 
 $service
 
 CREATE SERVICE http_server
-    SET listen          = 127.0.0.1:1919
+    SET listen          = 127.0.0.1:$port
     SET role            = selector
     SET plugins         = UrlGroup
     GROUP_REGEX \.(jpg|gif|png|js|css|swf)\$ = _static
@@ -75,7 +78,7 @@ Perlbal::Test::start_server($conf) or die qq{can't start testing perlbal.\n};
 
 # create perlbal test client
 my $wc = Perlbal::Test::WebClient->new;
-$wc->server('127.0.0.1:1919');
+$wc->server("127.0.0.1:$port");
 $wc->keepalive(1);
 $wc->http_version('1.0');
 

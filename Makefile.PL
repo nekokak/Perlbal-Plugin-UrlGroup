@@ -7,6 +7,7 @@ requires 'URI::Escape';
 
 use_test_base;
 build_requires 'Test::Declare';
+build_requires 'Test::TCP';
 
 auto_install;
 WriteAll;
