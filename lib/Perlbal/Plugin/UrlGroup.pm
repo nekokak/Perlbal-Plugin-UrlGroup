@@ -41,7 +41,7 @@ sub load {
 
         $host = lc $host;
         return $mc->err("invalid host pattern: '$host'")
-            unless $host =~ /^[\w\-\_\.\*\;\:]+$/;
+            unless $host =~ /^[\w\-\_\.\*\;\:\\]+$/;
 
         $ss->{extra_config}->{_use_wild_card} = 1 if $host =~ /\*/;
 
