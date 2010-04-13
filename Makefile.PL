@@ -5,9 +5,13 @@ all_from 'lib/Perlbal/Plugin/UrlGroup.pm';
 requires 'Perlbal';
 requires 'URI::Escape';
 
-use_test_base;
-build_requires 'Test::Declare';
+author_tests('xt');
+
+build_requires 'Test::More' => '0.94';
 build_requires 'Test::TCP';
 
-auto_install;
+use_test_base;
+auto_include;
+auto_set_repository;
 WriteAll;
+

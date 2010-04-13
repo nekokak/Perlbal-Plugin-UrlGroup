@@ -4,15 +4,13 @@ use lib './lib';
 use Perlbal::Test;
 use Perlbal::Test::WebServer;
 use Perlbal::Test::WebClient;
-use Test::Declare;
+use Test::More;
 use Test::TCP;
 
 my %hosts = (
     'nekokak.intra'   => +{ },
     '*.nekokak.intra'   => +{ },
 );
-
-plan tests => scalar(keys %hosts) * 3 * 2;
 
 # create tmp web server docroot path
 my @jobs = qw/app app_s1 app_static/;
@@ -96,16 +94,17 @@ for my $host (keys %hosts) {
 }
 
 # do test test test!
-describe 'Perlbal::Plugin::UrlGroupのテスト' => run {
+subtest 'do test' => sub {
     for my $host (keys %hosts) {
         for my $path (@request_path) {
-            test "$host" => run {
-                (my $request_host = $host) =~ s/\*/wildcard/;
-                my $res = $wc->request({ host => $request_host}, $path);
-                ok $res;
-                is $res->content, $path;
-            };
+            (my $request_host = $host) =~ s/\*/wildcard/;
+            my $res = $wc->request({ host => $request_host}, $path);
+            ok $res;
+            is $res->content, $path;
         }
     }
+    done_testing;
 };
+
+done_testing;
 

@@ -191,11 +191,11 @@ No bugs have been reported.
 
 =head1 AUTHOR
 
-Atsushi Kobayashi  C<< <atsushi __at__ mobilefactory.jp> >>
+Atsushi Kobayashi  C<< <nekokak __at__ gmail dot com> >>
 
 =head1 LICENCE AND COPYRIGHT
 
-Copyright (c) 2007, Atsushi Kobayashi C<< <atsushi __at__ mobilefactory.jp> >>. All rights reserved.
+Copyright (c) 2010, Atsushi Kobayashi C<< <nekokak __at__ gmail dot com> >>. All rights reserved.
 
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself. See L<perlartistic>.
